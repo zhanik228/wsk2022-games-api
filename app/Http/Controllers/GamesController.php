@@ -150,7 +150,13 @@ class GamesController extends Controller
         }
 
         foreach($game->gameVersions as $gameVersion) {
-            foreach(Score::where('game_version_id', $gameVersion->id)->get() as $gameScore) {
+            foreach(
+                Score::where(
+                    'game_version_id',
+                    $gameVersion->id
+                )->get() as $gameScore
+            )
+            {
                 $gameScore->forceDelete();
             }
             $gameVersion->forceDelete();
@@ -176,10 +182,9 @@ class GamesController extends Controller
             return response('You are not the author of the game', 403);
         }
 
-        $nextVersion = 'v'.intval(
-            substr($game->latestVersion->version, 1)
-            ) + 1;
-        $basePath = Storage::disk('local')->path('games/'.$game->id.'/'.$nextVersion);
+        $nextVersion = 'v'.intval(substr($game->latestVersion->version, 1)) + 1;
+        $basePath = Storage::disk('local')
+        ->path('games/'.$game->id.'/'.$nextVersion);
         $absolutePath = str_replace('\\', '/', $basePath);
 
         if (!Storage::disk('local')->exists($absolutePath)) {

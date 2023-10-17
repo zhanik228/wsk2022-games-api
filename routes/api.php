@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\GamesController;
+use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,7 @@ Route::middleware('json.response')->prefix('/v1')->group(function() {
     });
 
     Route::apiResource('games', GamesController::class)->only(['index', 'show']);
+    Route::apiResource('games.scores', ScoreController::class);
     Route::middleware('auth:sanctum')->group(function() {
         Route::apiResource('games', GamesController::class)->only(['store', 'destroy']);
         Route::apiResource('users', UsersController::class);

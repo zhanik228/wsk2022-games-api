@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GamesController;
+use App\Http\Controllers\PathController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,5 +20,12 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth:sanctum')->group(function() {
-    Route::post('api/v1/games/{game}/upload', [GamesController::class, 'upload']);
+    Route::post('api/v1/games/{game}/upload',
+    [GamesController::class, 'upload']);
 });
+
+Route::get('games/{game}/{version}/{path}',
+[PathController::class, 'index']);
+
+Route::get('games/{game}/{version}',
+[PathController::class, 'getHtml']);
