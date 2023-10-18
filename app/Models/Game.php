@@ -36,22 +36,14 @@ class Game extends Model
 
     public function getGamePathAttribute() {
         if ($this->latestVersion) {
-            return 'games/'.$this->id.'/'.$this->latestVersion->version.'/';
-        }
-        return null;
-    }
-
-    public function getThumbnailPath() {
-        if ($this->latestVersion) {
-            return $this->getGamePathAttribute().'thumbnail.png';
+            return '/games/'.$this->game_id.'/'.$this->latestVersion->version.'/';
         }
         return null;
     }
 
     public function getThumbnailAttribute() {
-        if ($this->latestVersion &&
-            Storage::disk('local')->exists($this->getThumbnailPath())) {
-            return $this->getThumbnailPath();
+        if ($this->latestVersion && $this->latestVersion->hasThumbnail()) {
+            return $this->getGamePathAttribute().'thumbnail.png';
         };
         return null;
     }
@@ -68,10 +60,10 @@ class Game extends Model
     }
 
     public function latestVersion() {
-        return $this->hasOne(GameVersion::class);
+        return $this->hasOne(GameVersion::class, 'game_id', 'game_id')->whereNull('deleted_at');
     }
 
-    public function gameVersions() {
+    public function versions() {
         return $this->hasMany(GameVersion::class)->withTrashed();
     }
 }
