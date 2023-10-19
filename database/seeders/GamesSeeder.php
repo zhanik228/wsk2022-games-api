@@ -21,13 +21,15 @@ class GamesSeeder extends Seeder
                 'title' => 'Demo Game 1',
                 'slug' => 'demo-game-1',
                 'description' => 'This is demo game 1',
-                'author_id' => $dev1->id
+                'author_id' => $dev1->id,
+                'created_at' => now()->subMinutes(2)->subDays(2)
             ],
             [
                 'title' => 'Demo Game 2',
                 'slug' => 'demo-game-2',
                 'description' => 'This is demo game 2',
-                'author_id' => $dev2->id
+                'author_id' => $dev2->id,
+                'created_at' => now()->subMinutes(5)->subDays(1)
             ],
         ];
 
@@ -36,7 +38,8 @@ class GamesSeeder extends Seeder
                 'title' => 'Demo Game '.$i,
                 'slug' => 'demo-game-'.$i,
                 'description' => 'This is demo game '.$i,
-                'author_id' => $dev1->id
+                'author_id' => $dev1->id,
+                'created_at' => now()->subMinutes($i)->subDays($i)
             ];
         }
 

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\PersonalAccessToken;
+use Illuminate\Support\Facades\DB;
 use ZipArchive;
 
 class GamesController extends Controller
@@ -35,13 +36,28 @@ class GamesController extends Controller
         $sortBy = $request->query('sortBy', 'title');
         $sortDir = $request->query('sortDir', 'asc');
 
-        $games = Game::select('*')
+        if ($sortBy === 'popular') {
+            $sortBy = 'score_count';
+        }
+        
+        if ($sortBy === 'uploaddate') {
+            $sortBy = 'game_versions.created_at';
+        }
+
+        $games = Game::select('*', DB::raw('SUM(score) as score_count'))
         ->leftJoin('game_versions', function($join) {
             $join->on('game_versions.game_id', '=', 'games.id')
             ->whereNull('game_versions.deleted_at');
         })
+        ->leftJoin(
+            'scores', 
+            'scores.game_version_id', 
+            'game_versions.id'
+        )
         ->skip($page * $size)
         ->take($size)
+        ->orderBy($sortBy, $sortDir)
+        ->groupBy('games.id')
         ->get()
         ->map(function($game) {
             return [

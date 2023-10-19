@@ -13,19 +13,19 @@ class Game extends Model
 
     protected $appends = ['author', 'thumbnail', 'uploadTimestamp', 'scoreCount'];
 
-    public function getScoreCountAttribute() {
-        $scoreCount = Score::select(DB::raw('SUM(score) as score_count'))
-            ->leftJoin(
-                'game_versions',
-                'game_versions.id',
-                'scores.game_version_id'
-            )
-            ->where('game_versions.game_id', $this->game_id)
-            ->groupBy('game_versions.game_id')
-            ->get();
+    // public function getScoreCountAttribute() {
+    //     $scoreCount = Score::select(DB::raw('SUM(score) as score_count'))
+    //         ->leftJoin(
+    //             'game_versions',
+    //             'game_versions.id',
+    //             'scores.game_version_id'
+    //         )
+    //         ->where('game_versions.game_id', $this->game_id)
+    //         ->groupBy('game_versions.game_id')
+    //         ->get();
 
-        return intval($scoreCount->pluck('score_count')->implode(''));
-    }
+    //     return intval($scoreCount->pluck('score_count')->implode(''));
+    // }
 
     public function getUploadTimestampAttribute() {
         if ($this->latestVersion) {
@@ -36,7 +36,7 @@ class Game extends Model
 
     public function getGamePathAttribute() {
         if ($this->latestVersion) {
-            return '/games/'.$this->game_id.'/'.$this->latestVersion->version.'/';
+            return '/games/'.$this->slug.'/'.$this->latestVersion->version.'/';
         }
         return null;
     }

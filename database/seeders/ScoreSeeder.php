@@ -32,7 +32,7 @@ class ScoreSeeder extends Seeder
         $game1v2 = GameVersion
         ::withTrashed()
         ->where('game_id', $game1->id)
-        ->where('version', 'v1')
+        ->where('version', 'v2')
         ->firstOrFail();
         $game2v1 = GameVersion
         ::where('game_id', $game2->id)
