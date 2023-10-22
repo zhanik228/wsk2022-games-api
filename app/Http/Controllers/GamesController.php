@@ -39,7 +39,7 @@ class GamesController extends Controller
         if ($sortBy === 'popular') {
             $sortBy = 'score_count';
         }
-        
+
         if ($sortBy === 'uploaddate') {
             $sortBy = 'game_versions.created_at';
         }
@@ -50,10 +50,11 @@ class GamesController extends Controller
             ->whereNull('game_versions.deleted_at');
         })
         ->leftJoin(
-            'scores', 
-            'scores.game_version_id', 
+            'scores',
+            'scores.game_version_id',
             'game_versions.id'
         )
+        ->whereNotNull('game_versions.game_id')
         ->skip($page * $size)
         ->take($size)
         ->orderBy($sortBy, $sortDir)
