@@ -66,10 +66,6 @@ class Game extends Model
         return $this->hasOne(GameVersion::class)->whereNull('deleted_at');
     }
 
-    public function thumbLatestVersion() {
-        return $this->hasOne(GameVersion::class, 'game_id', 'game_id')->whereNull('deleted_at');
-    }
-
     public function versions() {
         return $this->hasMany(GameVersion::class)->withTrashed();
     }
