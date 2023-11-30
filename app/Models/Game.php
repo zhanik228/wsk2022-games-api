@@ -42,9 +42,12 @@ class Game extends Model
     }
 
     public function getThumbnailAttribute() {
-        if ($this->latestVersion && $this->latestVersion->hasThumbnail()) {
-            return $this->getGamePathAttribute().'thumbnail.png';
-        };
+        if ($this->latestVersion) {
+            $imageExists = Storage::disk('local')->exists('games/'.$this->game_id.'/'.$this->latestVersion->version.'/thumbnail.png');
+            if ($imageExists) {
+                return $this->getGamePathAttribute().'thumbnail.png';
+            }
+        }
         return null;
     }
 
@@ -60,6 +63,10 @@ class Game extends Model
     }
 
     public function latestVersion() {
+        return $this->hasOne(GameVersion::class)->whereNull('deleted_at');
+    }
+
+    public function thumbLatestVersion() {
         return $this->hasOne(GameVersion::class, 'game_id', 'game_id')->whereNull('deleted_at');
     }
 

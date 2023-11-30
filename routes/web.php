@@ -27,5 +27,5 @@ Route::middleware('auth:sanctum')->group(function() {
 Route::get('games/{game}/{version}/{path}',
 [PathController::class, 'index']);
 
-Route::get('games/{game}/{version}',
+Route::get('games/{game}',
 [PathController::class, 'getHtml']);
